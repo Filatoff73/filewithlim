@@ -1,13 +1,13 @@
 package fileWithLim
 
 import (
-	"MediaCore/internal/pkg/utils"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sync"
 	"time"
+	"compress/gzip"
 )
 
 type FileLim struct {
@@ -152,4 +152,35 @@ func (f *FileLim) checkLogsCount() error {
 	}
 
 	return err
+}
+
+func ReadDir(dirname string, count int) ([]os.FileInfo, error) {
+	f, err := os.Open(dirname)
+	if err != nil {
+		return nil, err
+	}
+	list, err := f.Readdir(count)
+	f.Close()
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
+func Zip(in []byte) ([]byte, error) {
+	var b bytes.Buffer
+	gz := gzip.NewWriter(&b)
+	_, err := gz.Write(in)
+	if err != nil {
+		return []byte{}, err
+	}
+	err = gz.Flush()
+	if err != nil {
+		return []byte{}, err
+	}
+	err = gz.Close()
+	if err != nil {
+		return []byte{}, err
+	}
+	return b.Bytes(), nil
 }
