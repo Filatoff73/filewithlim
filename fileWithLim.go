@@ -1,6 +1,7 @@
 package fileWithLim
 
 import (
+	"bytes"
 	"compress/gzip"
 	"fmt"
 	"io/ioutil"
