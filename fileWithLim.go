@@ -1,13 +1,13 @@
 package fileWithLim
 
 import (
+	"compress/gzip"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sync"
 	"time"
-	"compress/gzip"
 )
 
 type FileLim struct {
@@ -115,7 +115,7 @@ func (f *FileLim) zipFile(fPath string) error {
 	if err != nil {
 		return err
 	}
-	zippedContent, err := utils.Zip(content)
+	zippedContent, err := Zip(content)
 	if err != nil {
 		return err
 	}
@@ -134,7 +134,7 @@ func (f *FileLim) checkLogsCount() error {
 	}
 	dir := filepath.Dir(f.filepath)
 
-	files, err := utils.ReadDir(dir, -1)
+	files, err := ReadDir(dir, -1)
 	if err != nil {
 		return err
 	}
